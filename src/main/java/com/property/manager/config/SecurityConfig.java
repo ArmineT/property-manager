@@ -36,6 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers(AuthUri.baseUri + "**").permitAll()
+                .antMatchers("/swagger-**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtTokenFilterConfigurer(jwtTokenProvider))
