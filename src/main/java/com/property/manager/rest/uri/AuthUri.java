@@ -1,6 +1,6 @@
 package com.property.manager.rest.uri;
 
-public interface AuthUri extends BaseRestUri {
+public interface AuthUri {
     String baseUri = BaseRestUri.baseUri + "authentication/";
 
     //registration

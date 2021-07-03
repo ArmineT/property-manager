@@ -1,7 +1,8 @@
 package com.property.manager.mapper;
 
-import com.property.manager.rest.dto.ClientDTO;
 import com.property.manager.data.entity.ClientEntity;
+import com.property.manager.mapper.common.CommonDataMapper;
+import com.property.manager.rest.dto.ClientDTO;
 import com.property.manager.utils.EncryptionUtils;
 
 import java.util.Collection;
@@ -15,12 +16,11 @@ public class ClientMapper implements CommonDataMapper<ClientEntity, ClientDTO> {
 
     @Override
     public ClientEntity toEntity(ClientDTO dto) {
-        ClientEntity clientEntity = new ClientEntity(
+        return new ClientEntity(
                 dto.getUsername(),
                 encryptionUtils.encrypt(dto.getPassword()),
                 dto.getName(),
                 dto.getSurname());
-        return clientEntity;
     }
 
     @Override

@@ -36,7 +36,7 @@ public class AuthController {
      * @return ResponseEntity object, with status code and object
      */
     @PostMapping(value = AuthUri.LOGIN)
-    public ResponseEntity<?> login(@RequestBody AuthRequestDTO authRequestDTO) {
+    public ResponseEntity<?> login(@Valid @RequestBody AuthRequestDTO authRequestDTO) {
         return authManager.login(authRequestDTO);
     }
 
@@ -47,7 +47,7 @@ public class AuthController {
      * @return ResponseEntity object, with status code and object
      */
     @GetMapping(value = AuthUri.REFRESH_TOKEN)
-    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenDTO refreshTokenDTO) {
+    public ResponseEntity<?> refreshToken(@Valid @RequestBody RefreshTokenDTO refreshTokenDTO) {
         return authManager.refreshToken(refreshTokenDTO);
     }
 }

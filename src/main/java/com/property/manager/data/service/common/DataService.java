@@ -16,4 +16,9 @@ public interface DataService<T extends BaseEntity, ID extends Serializable> {
         }
         return repository().save(object);
     }
+
+    default Iterable<T> saveAll(Iterable<T> objects) {
+        return repository().saveAll(objects);
+    }
+
 }

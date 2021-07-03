@@ -1,14 +1,14 @@
 package com.property.manager.rest.manager;
 
 import com.property.manager.data.entity.ClientEntity;
-import com.property.manager.rest.dto.auth.AuthRequestDTO;
-import com.property.manager.rest.dto.ClientDTO;
-import com.property.manager.rest.dto.auth.AuthResponseDTO;
-import com.property.manager.rest.dto.auth.RefreshTokenDTO;
+import com.property.manager.data.service.ClientService;
 import com.property.manager.error.CustomException;
 import com.property.manager.mapper.ClientMapper;
+import com.property.manager.rest.dto.ClientDTO;
+import com.property.manager.rest.dto.auth.AuthRequestDTO;
+import com.property.manager.rest.dto.auth.AuthResponseDTO;
+import com.property.manager.rest.dto.auth.RefreshTokenDTO;
 import com.property.manager.security.token.JwtTokenProvider;
-import com.property.manager.data.service.ClientService;
 import com.property.manager.utils.EncryptionUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -42,7 +43,7 @@ public class AuthManager {
      *
      * @param clientDTO - OK status code
      */
-    public ResponseEntity<?> register(ClientDTO clientDTO) {
+    public ResponseEntity<?> register(@Valid ClientDTO clientDTO) {
         ClientEntity clientEntityWithSameUsername = clientService.findByUsernameAndRemovedIsFalse(clientDTO.getUsername());
         if (clientEntityWithSameUsername != null) {
             return new ResponseEntity<>(messageSource.getMessage(client_username_exists, null, null), HttpStatus.OK);
@@ -61,7 +62,7 @@ public class AuthManager {
      * @return ResponseEntity object, with
      * - OK status code and AuthDTO object or error message
      */
-    public ResponseEntity<?> login(AuthRequestDTO authRequestDTO) {
+    public ResponseEntity<?> login(@Valid AuthRequestDTO authRequestDTO) {
         ClientEntity clientEntity = clientService.findByUsernameAndPasswordAndRemovedFalse(
                 authRequestDTO.getUsername(), encryptionUtils.encrypt(authRequestDTO.getPassword()));
         if (clientEntity != null) {
@@ -83,7 +84,7 @@ public class AuthManager {
      * @return ResponseEntity object, with
      * - OK status code and AuthDTO object or UNAUTHORIZED status code and error message
      */
-    public ResponseEntity<?> refreshToken(RefreshTokenDTO refreshTokenDTO) {
+    public ResponseEntity<?> refreshToken(@Valid RefreshTokenDTO refreshTokenDTO) {
         String refreshToken = refreshTokenDTO.getRefreshToken();
         String username = refreshTokens.get(refreshTokenDTO.getRefreshToken());
         try {
