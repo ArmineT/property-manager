@@ -5,8 +5,8 @@ import com.property.manager.mapper.common.CommonDataMapper;
 import com.property.manager.rest.dto.PropertyDTO;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 @Component
@@ -14,17 +14,22 @@ public class PropertyMapper implements CommonDataMapper<PropertyEntity, Property
 
     @Override
     public PropertyEntity toEntity(PropertyDTO dto) {
-        PropertyEntity PropertyEntity = new PropertyEntity(
-                dto.getName(),
-                dto.getCountry(),
-                dto.getCity(),
-                dto.getStreet(),
-                dto.getNumber(),
-                dto.getPostalCode(),
-                dto.getDescription(),
-                dto.getLat(),
-                dto.getLon());
-        return PropertyEntity;
+        PropertyEntity propertyEntity = new PropertyEntity();
+        updateToEntity(dto, propertyEntity);
+        return propertyEntity;
+    }
+
+    public void updateToEntity(PropertyDTO dto, PropertyEntity propertyEntity) {
+        propertyEntity.setId(dto.getId());
+        propertyEntity.setName(dto.getName());
+        propertyEntity.setCountry(dto.getCountry());
+        propertyEntity.setCity(dto.getCity());
+        propertyEntity.setStreet(dto.getStreet());
+        propertyEntity.setNumber(dto.getNumber());
+        propertyEntity.setPostalCode(dto.getPostalCode());
+        propertyEntity.setDescription(dto.getDescription());
+        propertyEntity.setLat(dto.getLat());
+        propertyEntity.setLon(dto.getLon());
     }
 
     @Override
@@ -34,7 +39,7 @@ public class PropertyMapper implements CommonDataMapper<PropertyEntity, Property
 
     @Override
     public PropertyDTO toDTO(PropertyEntity entity) {
-        return new PropertyDTO(
+        PropertyDTO propertyDTO = new PropertyDTO(
                 entity.getName(),
                 entity.getCountry(),
                 entity.getCity(),
@@ -44,6 +49,10 @@ public class PropertyMapper implements CommonDataMapper<PropertyEntity, Property
                 entity.getDescription(),
                 entity.getLon(),
                 entity.getLat());
+
+        propertyDTO.setId(entity.getId());
+
+        return propertyDTO;
     }
 
     @Override
@@ -52,9 +61,10 @@ public class PropertyMapper implements CommonDataMapper<PropertyEntity, Property
 
     }
 
-    @Override
-    public PropertyEntity updateFromDTO(PropertyDTO dto, PropertyEntity entity) {
-        return null;
+    public void updateToEntities(ArrayList<PropertyDTO> dtos, ArrayList<PropertyEntity> entities) {
+        for (int i = 0; i < entities.size(); i++) {
+            updateToEntity(dtos.get(i), entities.get(i));
+        }
     }
 
 }

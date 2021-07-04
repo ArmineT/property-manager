@@ -6,7 +6,6 @@ import com.property.manager.rest.manager.PropertyManager;
 import com.property.manager.rest.uri.PropertyUri;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,19 +20,24 @@ public class PropertyController extends BaseController {
     private final PropertyManager propertyManager;
 
     /**
-     * ASets properties coordinates and saves in database
+     * Sets properties coordinates and saves
      *
      * @param propertyDTOs
      * @return ResponseEntity object, with status code and object
      */
     @PostMapping
-    @PreAuthorize("permitAll")
     public ResponseEntity<?> addProperty(@RequestBody @Valid ArrayList<PropertyDTO> propertyDTOs) {
         return propertyManager.addProperty(propertyDTOs, getAuthenticated());
     }
 
+    /**
+     * Updates properties
+     *
+     * @param propertyDTOs
+     * @return ResponseEntity object, with status code and object
+     */
     @PutMapping
-    public ResponseEntity<?> addPropedrty(@RequestBody @Valid PropertyDTO propertyDTOs) {
-        return null;
+    public ResponseEntity<?> editProperties(@RequestBody @Valid ArrayList<PropertyDTO> propertyDTOs) {
+        return propertyManager.updateProperty(propertyDTOs, getAuthenticated());
     }
 }

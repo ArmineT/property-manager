@@ -10,6 +10,4 @@ public interface CommonDataMapper<E, D> {
     D toDTO(E entity);
 
     Collection<E> toEntities(Collection<D> dtoList);
-
-    E updateFromDTO(D dto, E entity);
 }

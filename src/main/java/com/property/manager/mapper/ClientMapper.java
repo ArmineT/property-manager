@@ -37,10 +37,4 @@ public class ClientMapper implements CommonDataMapper<ClientEntity, ClientDTO> {
     public Collection<ClientEntity> toEntities(Collection<ClientDTO> dtoList) {
         return null;
     }
-
-    @Override
-    public ClientEntity updateFromDTO(ClientDTO dto, ClientEntity entity) {
-        return null;
-    }
-
 }

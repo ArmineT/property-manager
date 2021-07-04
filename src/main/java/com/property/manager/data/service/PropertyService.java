@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class PropertyService implements DataService<PropertyEntity, Long> {
@@ -18,7 +20,7 @@ public class PropertyService implements DataService<PropertyEntity, Long> {
         return propertyRepository;
     }
 
-    public PropertyEntity findByIdAndRemovedIsFalse(Long id) {
-        return propertyRepository.findByIdAndRemovedIsFalse(id);
+    public Collection<PropertyEntity> findAllByIdsAndRemovedIsFalse(Collection<Long> ids) {
+        return propertyRepository.findAllByIdInAndRemovedIsFalse(ids);
     }
 }
