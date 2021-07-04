@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -94,6 +95,18 @@ public class PropertyManager {
         propertyMapper.updateToEntities(propertyDTOs, (ArrayList<PropertyEntity>) propertyEntities);
         propertyEntities.forEach(propertyEntity -> propertyEntity.setClientEntity(clientEntity));
         propertyEntities = (Collection<PropertyEntity>) propertyService.saveAll(propertyEntities);
+        return new ResponseEntity<>(propertyMapper.toDTOs(propertyEntities), HttpStatus.OK);
+    }
+
+    /**
+     * Gets properties of the clientEntity user by pageable
+     *
+     * @param pageable
+     * @param clientEntity
+     * @return ResponseEntity object, with status code and object
+     */
+    public ResponseEntity<?> getAll(Pageable pageable, ClientEntity clientEntity) {
+        Collection<PropertyEntity> propertyEntities = propertyService.findAllByClientEntityIdAndRemovedFalse(clientEntity.getId(), pageable);
         return new ResponseEntity<>(propertyMapper.toDTOs(propertyEntities), HttpStatus.OK);
     }
 }
