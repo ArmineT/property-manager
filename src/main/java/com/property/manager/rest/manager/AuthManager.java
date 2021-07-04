@@ -18,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import javax.validation.Valid;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -43,7 +42,7 @@ public class AuthManager {
      *
      * @param clientDTO - OK status code
      */
-    public ResponseEntity<?> register(@Valid ClientDTO clientDTO) {
+    public ResponseEntity<?> register(ClientDTO clientDTO) {
         ClientEntity clientEntityWithSameUsername = clientService.findByUsernameAndRemovedIsFalse(clientDTO.getUsername());
         if (clientEntityWithSameUsername != null) {
             return new ResponseEntity<>(messageSource.getMessage(client_username_exists, null, null), HttpStatus.OK);
@@ -62,7 +61,7 @@ public class AuthManager {
      * @return ResponseEntity object, with
      * - OK status code and AuthDTO object or error message
      */
-    public ResponseEntity<?> login(@Valid AuthRequestDTO authRequestDTO) {
+    public ResponseEntity<?> login(AuthRequestDTO authRequestDTO) {
         ClientEntity clientEntity = clientService.findByUsernameAndPasswordAndRemovedFalse(
                 authRequestDTO.getUsername(), encryptionUtils.encrypt(authRequestDTO.getPassword()));
         if (clientEntity != null) {
@@ -84,7 +83,7 @@ public class AuthManager {
      * @return ResponseEntity object, with
      * - OK status code and AuthDTO object or UNAUTHORIZED status code and error message
      */
-    public ResponseEntity<?> refreshToken(@Valid RefreshTokenDTO refreshTokenDTO) {
+    public ResponseEntity<?> refreshToken(RefreshTokenDTO refreshTokenDTO) {
         String refreshToken = refreshTokenDTO.getRefreshToken();
         String username = refreshTokens.get(refreshTokenDTO.getRefreshToken());
         try {

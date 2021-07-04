@@ -11,10 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 
 @RestController
@@ -32,7 +32,7 @@ public class PropertyController extends BaseController {
      * @return ResponseEntity object, with status code and object
      */
     @PostMapping
-    public ResponseEntity<?> addProperty(@RequestBody @Valid ArrayList<PropertyDTO> propertyDTOs) {
+    public ResponseEntity<?> addProperty(@RequestBody @Validated ArrayList<PropertyDTO> propertyDTOs) {
         return propertyManager.addProperty(propertyDTOs, getAuthenticated());
     }
 
@@ -43,7 +43,7 @@ public class PropertyController extends BaseController {
      * @return ResponseEntity object, with status code and object
      */
     @PutMapping
-    public ResponseEntity<?> editProperties(@RequestBody @Valid ArrayList<PropertyDTO> propertyDTOs) {
+    public ResponseEntity<?> editProperties(@RequestBody @Validated ArrayList<PropertyDTO> propertyDTOs) {
         return propertyManager.updateProperty(propertyDTOs, getAuthenticated());
     }
 
