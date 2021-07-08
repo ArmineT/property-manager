@@ -3,22 +3,23 @@ package com.property.manager.mapper;
 import com.property.manager.data.entity.ClientEntity;
 import com.property.manager.mapper.common.CommonDataMapper;
 import com.property.manager.rest.dto.ClientDTO;
-import com.property.manager.utils.EncryptionUtils;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
 
 public class ClientMapper implements CommonDataMapper<ClientEntity, ClientDTO> {
-    private final EncryptionUtils encryptionUtils;
 
-    public ClientMapper(EncryptionUtils encryptionUtils) {
-        this.encryptionUtils = encryptionUtils;
+    private final PasswordEncoder passwordEncoder;
+
+    public ClientMapper(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public ClientEntity toEntity(ClientDTO dto) {
         return new ClientEntity(
                 dto.getUsername(),
-                encryptionUtils.encrypt(dto.getPassword()),
+                passwordEncoder.encode(dto.getPassword()),
                 dto.getName(),
                 dto.getSurname());
     }
