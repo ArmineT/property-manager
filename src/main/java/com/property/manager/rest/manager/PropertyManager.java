@@ -7,6 +7,8 @@ import com.property.manager.data.service.PropertyService;
 import com.property.manager.mapper.PropertyMapper;
 import com.property.manager.rest.dto.PropertyDTO;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class PropertyManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PropertyManager.class);
 
     private final PropertyMapper propertyMapper;
     private final GeoService geoService;
@@ -47,6 +50,7 @@ public class PropertyManager {
         try {
             geoService.setPropertiesCoordinates(propertyDTOs);
         } catch (Exception ex) {
+            LOGGER.error("addProperty",ex);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -89,6 +93,7 @@ public class PropertyManager {
         try {
             geoService.setPropertiesCoordinates(propertyDTOs);
         } catch (IOException | InterruptedException ex) {
+            LOGGER.error("addProperty",ex);
             return new ResponseEntity<>(messageSource.getMessage(try_later, null, null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
