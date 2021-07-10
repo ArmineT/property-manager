@@ -1,7 +1,7 @@
-package com.property.manager.rest.manager;
+package com.property.manager.data.service;
 
 import com.property.manager.data.entity.ClientEntity;
-import com.property.manager.data.service.ClientService;
+import com.property.manager.data.repository.ClientRepository;
 import com.property.manager.error.CustomException;
 import com.property.manager.mapper.ClientMapper;
 import com.property.manager.rest.dto.ClientDTO;
@@ -23,9 +23,9 @@ import java.util.HashMap;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class AuthManager {
+public class AuthService {
 
-    private final ClientService clientService;
+    private final ClientRepository clientRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final HashMap<String, String> refreshTokens = new HashMap<>();
     private final MessageSource messageSource;
@@ -40,13 +40,13 @@ public class AuthManager {
      * @param clientDTO - OK status code
      */
     public ResponseEntity<?> register(ClientDTO clientDTO) {
-        ClientEntity clientEntityWithSameUsername = clientService.findByUsernameAndRemovedIsFalse(clientDTO.getUsername());
+        ClientEntity clientEntityWithSameUsername = clientRepository.findByUsernameAndRemovedIsFalse(clientDTO.getUsername());
         if (clientEntityWithSameUsername != null)
             return new ResponseEntity<>(messageSource.getMessage(client_username_exists, null, null), HttpStatus.BAD_REQUEST);
 
         ClientMapper clientMapper = new ClientMapper(new BCryptPasswordEncoder());
         ClientEntity clientEntity = clientMapper.toEntity(clientDTO);
-        clientService.save(clientEntity);
+        clientRepository.save(clientEntity);
 
         return new ResponseEntity<>(clientDTO, HttpStatus.OK);
     }
@@ -59,7 +59,7 @@ public class AuthManager {
      * - OK status code and AuthDTO object or error message
      */
     public ResponseEntity<?> login(AuthRequestDTO authRequestDTO) {
-        ClientEntity clientEntity = clientService.findByUsernameAndRemovedIsFalse(authRequestDTO.getUsername());
+        ClientEntity clientEntity = clientRepository.findByUsernameAndRemovedIsFalse(authRequestDTO.getUsername());
 
         if (!new BCryptPasswordEncoder().matches(authRequestDTO.getPassword(), clientEntity.getPassword()))
             return new ResponseEntity<>(

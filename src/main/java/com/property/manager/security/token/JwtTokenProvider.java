@@ -2,9 +2,9 @@ package com.property.manager.security.token;
 
 import com.auth0.jwt.JWT;
 import com.property.manager.data.entity.ClientEntity;
+import com.property.manager.data.repository.ClientRepository;
 import com.property.manager.error.CustomError;
 import com.property.manager.error.CustomException;
-import com.property.manager.data.service.ClientService;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import java.util.Date;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class JwtTokenProvider {
 
-    private final ClientService clientService;
+    private final ClientRepository clientRepository;
 
     @Value("${security.token.secret}")
     private String secretKey;
@@ -92,7 +92,7 @@ public class JwtTokenProvider {
      */
     public Authentication getAuthentication(String token) {
         String username = getUsername(token);
-        ClientEntity clientEntity = clientService.findByUsernameAndRemovedIsFalse(username);
+        ClientEntity clientEntity = clientRepository.findByUsernameAndRemovedIsFalse(username);
         return new UsernamePasswordAuthenticationToken(clientEntity, "", null);
     }
 
@@ -120,7 +120,7 @@ public class JwtTokenProvider {
      * checks if the access token has valid pattern
      *
      * @param token
-     * @return CustomExaption EXPIRED_TOKEN or ACCESS_DENIED message
+     * @return CustomException EXPIRED_TOKEN or ACCESS_DENIED message
      */
 
     public boolean validateToken(String token) throws CustomException {

@@ -3,7 +3,7 @@ package com.property.manager.rest.controller;
 import com.property.manager.rest.dto.ClientDTO;
 import com.property.manager.rest.dto.auth.AuthRequestDTO;
 import com.property.manager.rest.dto.auth.RefreshTokenDTO;
-import com.property.manager.rest.manager.AuthManager;
+import com.property.manager.data.service.AuthService;
 import com.property.manager.rest.uri.AuthUri;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping
 @RequiredArgsConstructor
 public class AuthController {
-    private final AuthManager authManager;
+    private final AuthService authService;
 
     /**
      * Register to platform
@@ -24,7 +24,7 @@ public class AuthController {
      */
     @PostMapping(value = AuthUri.REGISTER)
     public ResponseEntity<?> register(@RequestBody @Validated ClientDTO clientDTO) {
-        return authManager.register(clientDTO);
+        return authService.register(clientDTO);
     }
 
     /**
@@ -35,7 +35,7 @@ public class AuthController {
      */
     @PostMapping(value = AuthUri.LOGIN)
     public ResponseEntity<?> login(@RequestBody @Validated AuthRequestDTO authRequestDTO) {
-        return authManager.login(authRequestDTO);
+        return authService.login(authRequestDTO);
     }
 
     /**
@@ -46,7 +46,7 @@ public class AuthController {
      */
     @GetMapping(value = AuthUri.REFRESH_TOKEN)
     public ResponseEntity<?> refreshToken(@RequestBody @Validated RefreshTokenDTO refreshTokenDTO) {
-        return authManager.refreshToken(refreshTokenDTO);
+        return authService.refreshToken(refreshTokenDTO);
     }
 }
 

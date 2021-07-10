@@ -2,7 +2,7 @@ package com.property.manager.rest.controller;
 
 import com.property.manager.rest.controller.common.BaseController;
 import com.property.manager.rest.dto.PropertyDTO;
-import com.property.manager.rest.manager.PropertyManager;
+import com.property.manager.data.service.PropertyService;
 import com.property.manager.rest.uri.PropertyUri;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 @RequestMapping(PropertyUri.baseUri)
 public class PropertyController extends BaseController {
 
-    private final PropertyManager propertyManager;
+    private final PropertyService propertyService;
 
     /**
      * Sets properties coordinates and saves
@@ -33,7 +33,7 @@ public class PropertyController extends BaseController {
      */
     @PostMapping
     public ResponseEntity<?> addProperty(@RequestBody @Validated ArrayList<PropertyDTO> propertyDTOs) {
-        return propertyManager.addProperty(propertyDTOs, getAuthenticated());
+        return propertyService.addProperty(propertyDTOs, getAuthenticated());
     }
 
     /**
@@ -44,7 +44,7 @@ public class PropertyController extends BaseController {
      */
     @PutMapping
     public ResponseEntity<?> editProperties(@RequestBody @Validated ArrayList<PropertyDTO> propertyDTOs) {
-        return propertyManager.updateProperty(propertyDTOs, getAuthenticated());
+        return propertyService.updateProperty(propertyDTOs, getAuthenticated());
     }
 
     /**
@@ -66,6 +66,6 @@ public class PropertyController extends BaseController {
     public ResponseEntity<?> getProperties(
             @ApiIgnore @PageableDefault(sort = {"createdAt"}, direction = Sort.Direction.DESC) Pageable pageable) {
 
-        return propertyManager.getAll(pageable, getAuthenticated());
+        return propertyService.getAll(pageable, getAuthenticated());
     }
 }
